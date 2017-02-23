@@ -1,0 +1,22 @@
+language: ruby
+
+rvm:
+  - 2.3.1
+
+env:
+  - EXECUTION_COMMANDS="fab polish:ci"
+
+before_script:
+  - sudo pip install fab-polish
+  - cp config/secrets.yml.sample config/secrets.yml
+  - bundle install
+  - bundle exec rake db:create
+  - bundle exec rake db:migrate
+  - bundle exec rake db:test:prepare
+
+services:
+  - mysql
+
+script: "$EXECUTION_COMMANDS"
+
+cache: bundler
